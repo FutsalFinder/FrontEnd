@@ -2,16 +2,26 @@ import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
 
+interface PlatformProps {
+  platform: string;
+}
+
 const Match = () => {
   const { filteredData } = useData();
+
   return (
     <MathchStyle>
       {filteredData.map((item, idx) => (
         <MatchContainer key={idx}>
-          <Title>{item.time}</Title>
+          <Info>
+            <Time>{item.time}</Time>
+            <PlatformStyle platform={item.platform}>
+              {item.platform.replace("아이엠그라운드", "아이엠\n그라운드")}
+            </PlatformStyle>
+          </Info>
           <h4></h4>
           <div>
-            <h4>{item.title}</h4>
+            <MatchTitle>{item.title}</MatchTitle>
             <Item>
               <ItemList>{item.sex}</ItemList>
               <ItemList>{item.level}</ItemList>
@@ -21,7 +31,6 @@ const Match = () => {
           </div>
           <Info>
             <div>{`${item.curCount}/${item.maxCount}`}</div>
-            <div>{item.platform}</div>
           </Info>
         </MatchContainer>
       ))}
@@ -30,20 +39,42 @@ const Match = () => {
 };
 
 const MathchStyle = styled.div`
-  width: 60%;
-  margin: auto;
+  width: 80%;
+  margin: 0 auto;
   text-align: center;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const MatchContainer = styled.div`
   display: grid;
   width: 100%;
-  padding: 5px;
-  grid-template-columns: 0.2fr 0.1fr 0.4fr 0.2fr;
+  padding: 0px 5px;
+
+  grid-template-columns: 0.3fr 0fr 0.6fr 0.1fr;
+  grid-gap: 10px;
   border-bottom: 0.3px solid;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    grid-gap: 10px;
+    grid-template-columns: 0.15fr 0fr 0.7fr 0.25fr;
+  }
 `;
-const Title = styled.h1`
+const Time = styled.h1`
   margin: auto;
+
+  @media screen and (max-width: 768px) {
+    font-size: 20px;
+  }
+`;
+
+const MatchTitle = styled.h4`
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const Item = styled.div`
@@ -56,12 +87,45 @@ const ItemList = styled.span`
   color: white;
   padding: 4px;
   background-color: grey;
+
+  @media screen and (max-width: 768px) {
+    padding: 4px;
+    font-size: 10px;
+  }
 `;
 
 const Info = styled.div`
   display: flex;
+  align-items: center;
   gap: 10px;
-  margin: auto;
+`;
+
+const PlatformStyle = styled.div<PlatformProps>`
+  padding: 3px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+  white-space: pre-wrap;
+  @media screen and (max-width: 768px) {
+    padding: 2px;
+    font-size: 10px;
+  }
+  background-color: ${(props) => {
+    switch (props.platform) {
+      case "플랩풋볼":
+        return "blue";
+      case "퍼즐플레이":
+        return "green";
+      case "아이엠그라운드":
+        return "red";
+      case "위드풋살":
+        return "black";
+      default:
+        return "grey";
+    }
+  }};
 `;
 
 export default Match;
