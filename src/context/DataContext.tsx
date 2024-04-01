@@ -19,6 +19,13 @@ interface Data {
   maxCount: number;
   link: string;
 }
+interface RegionMap {
+  [key: string]: string;
+}
+
+interface SexMap {
+  [key: string]: string;
+}
 
 interface DataContextType {
   region: string;
@@ -57,9 +64,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       const queryParams = new URLSearchParams({
-        region, // "1" for 서울, "2" for 경기, "0" for 모든 지역
-        sex, // "-1" for 여자, "1" for 남자, "0" for 남녀 모두
-        platform, // "plab", "with", "puzzle", "iam" 등의 값
+        region,
+        sex,
+        platform,
       });
 
       const url = `http://localhost:8080/futsal-info/${date}?${queryParams}`;
@@ -80,11 +87,25 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   }, [date, region, sex, platform]);
 
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
-  const handleRegionChange = (selectedRegion: string) =>
-    setRegion(selectedRegion);
-  const handleSexChange = (selectedSex: string) => setSex(selectedSex);
-  const handlePlatformChange = (selectedPlatform: string) =>
+
+  const handleRegionChange = (selectedRegion: string) => {
+    const regionMap: RegionMap = {
+      서울: "1",
+      경기: "2",
+      모든지역: "0",
+      "그 외": "0",
+    };
+    setRegion(regionMap[selectedRegion] || "0");
+  };
+
+  const handleSexChange = (selectedSex: string) => {
+    const sexMap: SexMap = { 남성: "1", 여성: "-1", 혼성: "0" };
+    setSex(sexMap[selectedSex] || "0");
+  };
+
+  const handlePlatformChange = (selectedPlatform: string) => {
     setPlatform(selectedPlatform);
+  };
 
   return (
     <DataContext.Provider
