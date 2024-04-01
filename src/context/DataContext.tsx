@@ -5,7 +5,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { dummyData } from "../data/data";
 
 interface Data {
   title: string;
@@ -35,7 +34,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const useData = () => {
   const context = useContext(DataContext);
   if (context === undefined) {
-    throw new Error("useData must be used within a DataProvider");
+    throw new Error("Error");
   }
   return context;
 };
@@ -45,37 +44,42 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
-  const [region, setRegion] = useState<string>("");
-  const [sex, setSex] = useState<string>("");
+  const [region, setRegion] = useState<string>("0");
+  const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
   const [filteredData, setFilteredData] = useState<Data[]>([]);
 
   useEffect(() => {
-    filterData();
-  }, [region, sex, platform]); // 종속성 배열에 region, sex, platform 추가
+    const fetchData = async () => {
+      const queryParams = new URLSearchParams({
+        region, // "1" for 서울, "2" for 경기, "0" for 모든 지역
+        sex, // "-1" for 여자, "1" for 남자, "0" for 남녀 모두
+        platform, // "plab", "with", "puzzle", "iam" 등의 값
+      });
 
-  const filterData = () => {
-    const newData = dummyData.filter((item) => {
-      return (
-        (region === "" || item.region === region) &&
-        (sex === "" || item.sex === sex) &&
-        (platform === "" || item.platform === platform)
-      );
-    });
-    setFilteredData(newData);
-  };
+      const date = new Date().toISOString().slice(0, 10);
+      const url = `http://localhost:8080/futsal-info/${date}?${queryParams}`;
 
-  const handleRegionChange = (selectedRegion: string) => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setFilteredData(data);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, [region, sex, platform]);
+
+  const handleRegionChange = (selectedRegion: string) =>
     setRegion(selectedRegion);
-  };
-
-  const handleSexChange = (selectedSex: string) => {
-    setSex(selectedSex);
-  };
-
-  const handlePlatformChange = (selectedPlatform: string) => {
+  const handleSexChange = (selectedSex: string) => setSex(selectedSex);
+  const handlePlatformChange = (selectedPlatform: string) =>
     setPlatform(selectedPlatform);
-  };
 
   return (
     <DataContext.Provider
