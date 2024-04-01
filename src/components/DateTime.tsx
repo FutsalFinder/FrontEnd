@@ -10,21 +10,35 @@ interface ClickableDateProps {
 const DateTime: React.FC = () => {
   const today: Date = new Date();
   const dates: string[] = [];
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState<number>(0); // 초기 값은 오늘 날짜로 설정
   const { handleRegionChange, handleSexChange, handlePlatformChange } =
     useData();
 
   const handleDateClick = (index: number) => {
     setSelectedDate(index);
   };
-  // 1주일 후까지의 날짜를 계산하여 dates 배열에 추가합니다.
-  for (let i = 0; i < 7; i++) {
+
+  const handleNextDay = () => {
+    if (selectedDate < dates.length - 1) {
+      setSelectedDate(selectedDate + 1);
+    }
+  };
+
+  const handlePrevDay = () => {
+    if (selectedDate > 0) {
+      setSelectedDate(selectedDate - 1);
+    }
+  };
+
+  for (let i = 0; i < 10; i++) {
     const date: Date = new Date(today);
     date.setDate(today.getDate() + i);
     const month: number = date.getMonth() + 1;
     const day: number = date.getDate();
     dates.push(`${month}/${day}`);
   }
+
+  const visibleDates = dates.slice(selectedDate, selectedDate + 7);
 
   return (
     <>
@@ -53,28 +67,40 @@ const DateTime: React.FC = () => {
         </div>
       </DateHead>
       <DateContainer>
-        <Button text={"<"} size="20px" color="white" border="none" />
+        <Button
+          text={"<"}
+          size="20px"
+          color="white"
+          border="none"
+          onClick={handlePrevDay}
+          disabled={selectedDate === 0}
+        />
 
-        {dates.map((dateString, index) => (
+        {visibleDates.map((dateString, index) => (
           <div key={index}>
             <ClickDate
-              onClick={() => handleDateClick(index)}
-              isSelected={selectedDate === index}
+              onClick={() => handleDateClick(selectedDate + index)}
+              isSelected={selectedDate + index === selectedDate}
             >
-              {
-                <Button
-                  text={dateString}
-                  size="16px"
-                  color="white"
-                  border="none"
-                  borderRadius="20px"
-                />
-              }
+              <Button
+                text={dateString}
+                size="16px"
+                color="white"
+                border="none"
+                borderRadius="20px"
+              />
             </ClickDate>
           </div>
         ))}
 
-        <Button text={">"} size="20px" color="white" border="none" />
+        <Button
+          text={">"}
+          size="20px"
+          color="white"
+          border="none"
+          onClick={handleNextDay}
+          disabled={selectedDate + 7 >= dates.length}
+        />
       </DateContainer>
     </>
   );

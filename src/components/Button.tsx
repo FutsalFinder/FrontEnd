@@ -11,6 +11,7 @@ interface ButtonProps {
   border?: string;
   borderRadius?: string;
   onClick?: () => void;
+  disabled?: boolean; // disabled 속성 추가
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   border,
   borderRadius,
   onClick,
+  disabled, // disabled props 추가
 }) => {
   return (
     <ButtonStyle
@@ -32,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
       border={border}
       borderRadius={borderRadius}
       onClick={onClick}
+      disabled={disabled} // disabled props 전달
     >
       {text}
     </ButtonStyle>
@@ -46,13 +49,16 @@ const ButtonStyle = styled.button<{
   border?: string;
   borderRadius?: string;
 }>`
-  cursor: pointer;
+  cursor: ${(props) =>
+    props.disabled ? "not-allowed" : "pointer"}; // disabled 일 때 커서 변경
   font-size: ${(props) => props.size};
   background-color: ${(props) => props.color};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border: ${(props) => props.border};
   border-radius: ${(props) => props.borderRadius};
+  opacity: ${(props) =>
+    props.disabled ? 0.5 : 1}; // disabled 일 때 투명도 변경
 `;
 
 export default Button;
