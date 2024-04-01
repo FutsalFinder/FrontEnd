@@ -23,7 +23,7 @@ const Match = () => {
           <div>
             <MatchTitle>{item.title}</MatchTitle>
             <Item>
-              <ItemList>{item.sex}</ItemList>
+              <ItemList>{item.sex}</ItemList> // 백엔드 응답에 따라 변경 필요
               <ItemList>{item.level}</ItemList>
               <ItemList>{item.matchType}</ItemList>
               <ItemList>{item.matchChar}</ItemList>

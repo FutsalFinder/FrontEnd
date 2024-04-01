@@ -17,6 +17,7 @@ interface Data {
   platform: string;
   curCount: number;
   maxCount: number;
+  link: string;
 }
 
 interface DataContextType {
@@ -24,6 +25,7 @@ interface DataContextType {
   sex: string;
   platform: string;
   filteredData: Data[];
+  handleDateChange: (date: string) => void;
   handleRegionChange: (selectedRegion: string) => void;
   handleSexChange: (selectedSex: string) => void;
   handlePlatformChange: (selectedPlatform: string) => void;
@@ -44,6 +46,9 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().slice(0, 10)
+  );
   const [region, setRegion] = useState<string>("0");
   const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
@@ -57,13 +62,12 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         platform, // "plab", "with", "puzzle", "iam" 등의 값
       });
 
-      const date = new Date().toISOString().slice(0, 10);
       const url = `http://localhost:8080/futsal-info/${date}?${queryParams}`;
 
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Network Error");
         }
         const data = await response.json();
         setFilteredData(data);
@@ -73,8 +77,9 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     };
 
     fetchData();
-  }, [region, sex, platform]);
+  }, [date, region, sex, platform]);
 
+  const handleDateChange = (selectedDate: string) => setDate(selectedDate);
   const handleRegionChange = (selectedRegion: string) =>
     setRegion(selectedRegion);
   const handleSexChange = (selectedSex: string) => setSex(selectedSex);
@@ -88,6 +93,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         sex,
         platform,
         filteredData,
+        handleDateChange,
         handleRegionChange,
         handleSexChange,
         handlePlatformChange,
