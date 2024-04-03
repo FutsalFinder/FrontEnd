@@ -69,15 +69,29 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         platform,
       });
 
-      const url = `http://localhost:8080/futsal-info/${date}?${queryParams}`;
+      const url = `http://localhost:8080/futsal-info/2024-04-04`;
 
       try {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Network Error");
         }
-        const data = await response.json();
-        setFilteredData(data);
+        const rawData = await response.json();
+        const transformedData = rawData.map((item: any) => ({
+          title: item.match_title,
+          time: item.time,
+          sex: item.sex,
+          matchType: item.match_type,
+          level: item.level,
+          matchChar: `${item.match_vs}vs${item.match_vs}`, // 5나 6으로 들어오면 5vs5, 6vs6으로 변환
+          region: item.region,
+          platform: item.platform,
+          curCount: parseInt(item.cur_player, 10),
+          maxCount: parseInt(item.max_player, 10),
+          link: item.link,
+        }));
+        setFilteredData(transformedData);
+        console.log(transformedData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -85,7 +99,6 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
     fetchData();
   }, [date, region, sex, platform]);
-
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
 
   const handleRegionChange = (selectedRegion: string) => {
