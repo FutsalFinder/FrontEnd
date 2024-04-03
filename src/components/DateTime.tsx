@@ -11,11 +11,22 @@ const DateTime: React.FC = () => {
   const today: Date = new Date();
   const dates: string[] = [];
   const [selectedDate, setSelectedDate] = useState<number>(0); // 초기 값은 오늘 날짜로 설정
-  const { handleRegionChange, handleSexChange, handlePlatformChange } =
-    useData();
+  const {
+    handleDateChange,
+    handleRegionChange,
+    handleSexChange,
+    handlePlatformChange,
+  } = useData();
 
   const handleDateClick = (index: number) => {
     setSelectedDate(index);
+    const selectedDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + index
+    );
+    const formattedDate = selectedDate.toISOString().slice(0, 10);
+    handleDateChange(formattedDate);
   };
 
   const handleNextDay = () => {
