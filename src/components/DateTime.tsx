@@ -63,7 +63,6 @@ const DateTime: React.FC = () => {
             <option value="">지역 보기</option>
             <option value="서울">서울</option>
             <option value="경기">경기</option>
-            <option value="그 외">그 외</option>
           </Selection>
           <Selection onChange={(e) => handleSexChange(e.target.value)}>
             <option value="">성별</option>

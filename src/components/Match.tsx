@@ -9,7 +9,7 @@ interface PlatformProps {
 
 const Match = () => {
   const { filteredData } = useData();
-  const navigateExternalURL = (url: string) => {
+  const navigateLink = (url: string) => {
     // URL이 http:// 또는 https://로 시작하는지 확인
     const isExternal = /^(http|https):\/\//.test(url);
     if (!isExternal) {
@@ -22,10 +22,7 @@ const Match = () => {
   return (
     <MathchStyle>
       {filteredData.map((item, idx) => (
-        <MatchContainer
-          key={idx}
-          onClick={() => navigateExternalURL(item.link)}
-        >
+        <MatchContainer key={idx} onClick={() => navigateLink(item.link)}>
           <Info>
             <Time>{item.time}</Time>
             <PlatformStyle platform={item.platform}>
