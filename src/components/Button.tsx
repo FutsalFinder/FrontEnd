@@ -11,7 +11,7 @@ interface ButtonProps {
   border?: string;
   borderRadius?: string;
   onClick?: () => void;
-  disabled?: boolean; // disabled 속성 추가
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
   border,
   borderRadius,
   onClick,
-  disabled, // disabled props 추가
+  disabled,
 }) => {
   return (
     <ButtonStyle
@@ -34,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({
       border={border}
       borderRadius={borderRadius}
       onClick={onClick}
-      disabled={disabled} // disabled props 전달
+      disabled={disabled}
     >
       {text}
     </ButtonStyle>

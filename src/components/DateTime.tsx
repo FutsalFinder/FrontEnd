@@ -25,9 +25,10 @@ const DateTime: React.FC = () => {
     const selectedDate = new Date(
       today.getFullYear(),
       today.getMonth(),
-      today.getDate() + index
+      today.getDate() + index + 1
     );
     const formattedDate = selectedDate.toISOString().slice(0, 10);
+
     handleDateChange(formattedDate);
   };
 
