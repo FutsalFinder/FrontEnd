@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
+import { useNavigate } from "react-router-dom";
 
 interface PlatformProps {
   platform: string;
@@ -8,11 +9,23 @@ interface PlatformProps {
 
 const Match = () => {
   const { filteredData } = useData();
+  const navigateExternalURL = (url: string) => {
+    // URL이 http:// 또는 https://로 시작하는지 확인
+    const isExternal = /^(http|https):\/\//.test(url);
+    if (!isExternal) {
+      // URL 수정 로직
+      url = "https://" + url;
+    }
+    window.location.href = url;
+  };
 
   return (
     <MathchStyle>
       {filteredData.map((item, idx) => (
-        <MatchContainer key={idx}>
+        <MatchContainer
+          key={idx}
+          onClick={() => navigateExternalURL(item.link)}
+        >
           <Info>
             <Time>{item.time}</Time>
             <PlatformStyle platform={item.platform}>
