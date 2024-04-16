@@ -69,7 +69,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         platform,
       });
 
-      const url = `http://localhost:8080/futsal-info/2024-04-04`;
+      const url = `http://localhost:8080/futsal-info/${date}`;
 
       try {
         const response = await fetch(url);
