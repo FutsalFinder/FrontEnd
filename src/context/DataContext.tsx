@@ -106,7 +106,6 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
       서울: "1",
       경기: "2",
       모든지역: "0",
-      "그 외": "0",
     };
     setRegion(regionMap[selectedRegion] || "0");
   };
