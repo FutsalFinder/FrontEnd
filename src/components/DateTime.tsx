@@ -10,7 +10,9 @@ interface ClickableDateProps {
 const DateTime: React.FC = () => {
   const today: Date = new Date();
   const dates: string[] = [];
-  const [selectedDate, setSelectedDate] = useState<number>(0); // 초기 값은 오늘 날짜로 설정
+  const [selectedDate, setSelectedDate] = useState<number>(0);
+  const [selectedWeek, setSelectedWeek] = useState<number>(0);
+
   const {
     handleDateChange,
     handleRegionChange,
@@ -29,27 +31,27 @@ const DateTime: React.FC = () => {
     handleDateChange(formattedDate);
   };
 
-  const handleNextDay = () => {
-    if (selectedDate < dates.length - 1) {
-      setSelectedDate(selectedDate + 1);
+  // 다음 주를 보여주기
+  const handleNextWeek = () => {
+    setSelectedWeek(selectedWeek + 1);
+  };
+
+  // 이전 주를 보여주기
+  const handlePrevWeek = () => {
+    if (selectedWeek > 0) {
+      setSelectedWeek(selectedWeek - 1);
     }
   };
 
-  const handlePrevDay = () => {
-    if (selectedDate > 0) {
-      setSelectedDate(selectedDate - 1);
-    }
-  };
-
-  for (let i = 0; i < 10; i++) {
-    const date: Date = new Date(today);
+  for (let i = 0; i < 13; i++) {
+    const date = new Date(today);
     date.setDate(today.getDate() + i);
-    const month: number = date.getMonth() + 1;
-    const day: number = date.getDate();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
     dates.push(`${month}/${day}`);
   }
 
-  const visibleDates = dates.slice(selectedDate, selectedDate + 7);
+  const visibleDates = dates.slice(selectedWeek, selectedWeek + 7);
 
   return (
     <>
@@ -83,15 +85,14 @@ const DateTime: React.FC = () => {
           size="20px"
           color="white"
           border="none"
-          onClick={handlePrevDay}
-          disabled={selectedDate === 0}
+          onClick={handlePrevWeek}
+          disabled={selectedWeek === 0}
         />
-
         {visibleDates.map((dateString, index) => (
           <div key={index}>
             <ClickDate
-              onClick={() => handleDateClick(selectedDate + index)}
-              isSelected={selectedDate + index === selectedDate}
+              onClick={() => handleDateClick(selectedWeek + index)}
+              isSelected={selectedWeek + index === selectedDate}
             >
               <Button
                 text={dateString}
@@ -103,14 +104,13 @@ const DateTime: React.FC = () => {
             </ClickDate>
           </div>
         ))}
-
         <Button
           text={">"}
           size="20px"
           color="white"
           border="none"
-          onClick={handleNextDay}
-          disabled={selectedDate + 7 >= dates.length}
+          onClick={handleNextWeek}
+          disabled={selectedWeek + 7 >= dates.length}
         />
       </DateContainer>
     </>
