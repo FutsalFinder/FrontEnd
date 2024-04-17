@@ -8,7 +8,10 @@ interface ClickableDateProps {
 }
 
 const DateTime: React.FC = () => {
-  const today: Date = new Date();
+  const today = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
+  );
+
   const dates: string[] = [];
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedWeek, setSelectedWeek] = useState<number>(0);
