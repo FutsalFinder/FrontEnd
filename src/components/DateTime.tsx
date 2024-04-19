@@ -12,7 +12,7 @@ const DateTime: React.FC = () => {
     new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
   );
 
-  const dates: string[] = [];
+  const dates: React.ReactNode[] = []; // JSX 요소를 저장하기 위해 타입 변경
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedWeek, setSelectedWeek] = useState<number>(0);
 
@@ -31,7 +31,6 @@ const DateTime: React.FC = () => {
       today.getDate() + index + 1
     );
     const formattedDate = selectedDate.toISOString().slice(0, 10);
-
     handleDateChange(formattedDate);
   };
 
@@ -52,7 +51,14 @@ const DateTime: React.FC = () => {
     date.setDate(today.getDate() + i);
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    dates.push(`${month}/${day}`);
+    const dayOfWeek = date.toLocaleDateString("ko-KR", { weekday: "short" });
+    dates.push(
+      <div>
+        {`${month}/${day}`}
+        <br />
+        {`${dayOfWeek}`}
+      </div>
+    ); // JSX로 저장
   }
 
   const visibleDates = dates.slice(selectedWeek, selectedWeek + 7);
@@ -91,15 +97,15 @@ const DateTime: React.FC = () => {
           onClick={handlePrevWeek}
           disabled={selectedWeek === 0}
         />
-        {visibleDates.map((dateString, index) => (
+        {visibleDates.map((dateElement, index) => (
           <div key={index}>
             <ClickDate
               onClick={() => handleDateClick(selectedWeek + index)}
               isSelected={selectedWeek + index === selectedDate}
             >
               <Button
-                text={dateString}
-                size="16px"
+                text={dateElement}
+                size="14px"
                 color="white"
                 border="none"
                 borderRadius="20px"
