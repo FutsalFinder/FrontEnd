@@ -19,6 +19,7 @@ interface Data {
   maxCount: number;
   link: string;
 }
+
 interface RegionMap {
   [key: string]: string;
 }
@@ -43,7 +44,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const useData = () => {
   const context = useContext(DataContext);
   if (context === undefined) {
-    throw new Error("Error");
+    throw new Error("useData must be used within a DataProvider");
   }
   return context;
 };
@@ -53,9 +54,17 @@ interface DataProviderProps {
 }
 
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
-  const [date, setDate] = useState<string>(
-    new Date().toISOString().slice(0, 10)
-  );
+  const koreanDate = new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Seoul",
+  })
+    .format(new Date())
+    .replace(/\. /g, "-")
+    .slice(0, -1);
+
+  const [date, setDate] = useState<string>(koreanDate);
   const [region, setRegion] = useState<string>("0");
   const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
@@ -83,7 +92,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           sex: item.sex,
           matchType: item.match_type,
           level: item.level,
-          matchChar: `${item.match_vs}vs${item.match_vs}`, // 5나 6으로 들어오면 5vs5, 6vs6으로 변환
+          matchChar: `${item.match_vs}vs${item.match_vs}`, // 예: '5'나 '6'으로 들어오면 '5vs5', '6vs6'으로 변환
           region: item.region,
           platform: item.platform,
           curCount: parseInt(item.cur_player, 10),
@@ -99,8 +108,8 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
 
     fetchData();
   }, [date, region, sex, platform]);
-  const handleDateChange = (selectedDate: string) => setDate(selectedDate);
 
+  const handleDateChange = (selectedDate: string) => setDate(selectedDate);
   const handleRegionChange = (selectedRegion: string) => {
     const regionMap: RegionMap = {
       서울: "1",
