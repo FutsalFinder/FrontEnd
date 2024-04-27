@@ -6,6 +6,8 @@ import React, {
   useEffect,
 } from "react";
 
+import LoaindgScreen from "../components/LoadingScreen";
+
 interface Data {
   title: string;
   time: string;
@@ -44,7 +46,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const useData = () => {
   const context = useContext(DataContext);
   if (context === undefined) {
-    throw new Error("useData must be used within a DataProvider");
+    throw new Error("Error");
   }
   return context;
 };
@@ -69,6 +71,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
   const [filteredData, setFilteredData] = useState<Data[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,14 +103,18 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           link: item.link,
         }));
         setFilteredData(transformedData);
-        console.log(transformedData);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
+      setIsLoading(false);
     };
 
     fetchData();
   }, [date, region, sex, platform]);
+
+  if (isLoading) {
+    return <LoaindgScreen />; // 로딩 상태일 때 로딩 스크린 표시
+  }
 
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
   const handleRegionChange = (selectedRegion: string) => {
