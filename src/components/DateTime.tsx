@@ -188,6 +188,7 @@ const ClickDate = styled.div<ClickableDateProps>`
 
   @media (max-width: 768px) {
     padding: 5px;
+    width: 20px;
   }
 `;
 const DateContainer = styled.div`
