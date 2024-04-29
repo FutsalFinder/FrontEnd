@@ -11,13 +11,10 @@ interface PlatformProps {
 const Match = () => {
   const { filteredData } = useData();
   const navigateLink = (url: string) => {
-    // URL이 http:// 또는 https://로 시작하는지 확인
-    const isExternal = /^(http|https):\/\//.test(url);
-    if (!isExternal) {
-      // URL 수정 로직
-      url = "https://" + url;
+    if (!/^(http|https):\/\//.test(url)) {
+      url = `https://${url}`;
     }
-    window.location.href = url;
+    window.open(url, "_blank");
   };
 
   return filteredData.length === 0 ? (
