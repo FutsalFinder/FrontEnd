@@ -5,7 +5,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-
 import Loading from "../components/Loading";
 
 interface Data {
@@ -21,12 +20,7 @@ interface Data {
   maxCount: number;
   link: string;
 }
-interface RegionMap {
-  [key: string]: string;
-}
-interface SexMap {
-  [key: string]: string;
-}
+
 interface DataContextType {
   region: string;
   sex: string;
@@ -37,6 +31,7 @@ interface DataContextType {
   handleSexChange: (selectedSex: string) => void;
   handlePlatformChange: (selectedPlatform: string) => void;
 }
+
 const DataContext = createContext<DataContextType | undefined>(undefined);
 export const useData = () => {
   const context = useContext(DataContext);
@@ -45,10 +40,10 @@ export const useData = () => {
   }
   return context;
 };
-interface DataProviderProps {
-  children: ReactNode;
-}
-export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
+
+export const DataProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const koreanDate = new Intl.DateTimeFormat("ko-KR", {
     year: "numeric",
     month: "2-digit",
@@ -62,23 +57,17 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [region, setRegion] = useState<string>("0");
   const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
+  const [data, setData] = useState<Data[]>([]);
   const [filteredData, setFilteredData] = useState<Data[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const queryParams = new URLSearchParams({
-        region,
-        sex,
-        platform,
-      });
-      const url = `http://localhost:8080/futsal-info/2024-04-30`;
+      const url = `http://localhost:8080/futsal-info/${date}`;
       try {
         const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error("Network Error");
-        }
+        if (!response.ok) throw new Error("Network Error");
         const rawData = await response.json();
         const transformedData = rawData.map((item: any) => ({
           title: item.match_title,
@@ -86,14 +75,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           sex: item.sex,
           matchType: item.match_type,
           level: item.level,
-          matchChar: `${item.match_vs}vs${item.match_vs}`, // 예: '5'나 '6'으로 들어오면 '5vs5', '6vs6'으로 변환
+          matchChar: `${item.match_vs}vs${item.match_vs}`,
           region: item.region,
           platform: item.platform,
-          curCount: parseInt(item.cur_player, 10),
-          maxCount: parseInt(item.max_player, 10),
+          curCount: parseInt(item.cur_player),
+          maxCount: parseInt(item.max_player),
           link: item.link,
         }));
-        setFilteredData(transformedData);
+        setData(transformedData);
         setLoading(false);
       } catch (error) {
         console.error("데이터를 불러오는데 실패했습니다. ", error);
@@ -101,24 +90,42 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     };
 
     fetchData();
-  }, [date, region, sex, platform]);
+  }, [date]);
 
-  const handleDateChange = (selectedDate: string) => setDate(selectedDate);
-  const handleRegionChange = (selectedRegion: string) => {
-    const regionMap: RegionMap = {
-      서울: "1",
-      경기: "2",
-      모든지역: "0",
+  useEffect(() => {
+    const applyFilters = () => {
+      let filtered = data;
+
+      if (sex === "남녀모두") {
+        filtered = filtered.filter((item) => item.sex === "남녀모두");
+      } else if (sex === "남자") {
+        filtered = filtered.filter((item) => item.sex === "남자");
+      } else if (sex === "여자") {
+        filtered = filtered.filter((item) => item.sex === "여자");
+      }
+
+      if (platform === "Plab") {
+        filtered = filtered.filter((item) => item.platform === platform);
+      } else if (platform === "Puzzle") {
+        filtered = filtered.filter((item) => item.platform === platform);
+      } else if (platform === "With") {
+        filtered = filtered.filter((item) => item.platform === platform);
+      } else if (platform === "Iam") {
+        filtered = filtered.filter((item) => item.platform === platform);
+      }
+
+      setFilteredData(filtered);
     };
-    setRegion(regionMap[selectedRegion] || "0");
-  };
-  const handleSexChange = (selectedSex: string) => {
-    const sexMap: SexMap = { 남성: "1", 여성: "-1", 혼성: "0" };
-    setSex(sexMap[selectedSex] || "0");
-  };
-  const handlePlatformChange = (selectedPlatform: string) => {
+
+    applyFilters();
+  }, [data, sex, platform]);
+  const handleDateChange = (selectedDate: string) => setDate(selectedDate);
+  const handleRegionChange = (selectedRegion: string) =>
+    setRegion(selectedRegion);
+  const handleSexChange = (selectedSex: string) => setSex(selectedSex);
+  const handlePlatformChange = (selectedPlatform: string) =>
     setPlatform(selectedPlatform);
-  };
+
   return (
     <>
       {loading ? <Loading /> : null}

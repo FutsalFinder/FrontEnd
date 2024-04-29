@@ -77,16 +77,16 @@ const DateTime: React.FC = () => {
           </Selection>
           <Selection onChange={(e) => handleSexChange(e.target.value)}>
             <option value="">성별</option>
-            <option value="혼성">혼성</option>
-            <option value="남성">남성</option>
-            <option value="여성">여성</option>
+            <option value="남녀모두">남녀모두</option>
+            <option value="남자">남자</option>
+            <option value="여자">여자</option>
           </Selection>
           <Selection onChange={(e) => handlePlatformChange(e.target.value)}>
             <option value="">플랫폼</option>
-            <option value="플랩">플랩</option>
-            <option value="퍼즐">퍼즐</option>
-            <option value="아이엠">아이엠</option>
-            <option value="위드">위드</option>
+            <option value="Plab">플랩</option>
+            <option value="Puzzle">퍼즐</option>
+            <option value="Iam">아이엠</option>
+            <option value="With">위드</option>
           </Selection>
         </div>
       </DateHead>
