@@ -89,7 +89,9 @@ const MatchTitle = styled.h4`
 `;
 
 const Item = styled.div`
-  margin: 20px;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
 `;
 
 const ItemList = styled.span`
@@ -101,7 +103,7 @@ const ItemList = styled.span`
 
   @media screen and (max-width: 768px) {
     padding: 4px;
-    font-size: 10px;
+    font-size: 8px;
   }
 `;
 
@@ -121,18 +123,18 @@ const PlatformStyle = styled.div<PlatformProps>`
   white-space: pre-wrap;
   @media screen and (max-width: 768px) {
     padding: 2px;
-    font-size: 10px;
+    font-size: 12px;
   }
   background-color: ${(props) => {
     switch (props.platform) {
-      case "플랩풋볼":
+      case "Plab":
         return "blue";
-      case "퍼즐플레이":
+      case "Puzzle":
         return "green";
-      case "아이엠그라운드":
+      case "Iam":
         return "red";
-      case "위드풋살":
-        return "black";
+      case "With":
+        return "orange";
       default:
         return "grey";
     }

@@ -96,7 +96,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         setFilteredData(transformedData);
         setLoading(false);
       } catch (error) {
-        console.error("Failed to fetch data:", error);
+        console.error("데이터를 불러오는데 실패했습니다. ", error);
       }
     };
 

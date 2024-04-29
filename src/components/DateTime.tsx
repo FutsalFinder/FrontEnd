@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "./common/Button";
 import { useData } from "../context/DataContext";
 
 interface ClickableDateProps {
   isSelected: boolean;
+  dayOfWeek: string;
 }
 
 const DateTime: React.FC = () => {
@@ -12,7 +13,7 @@ const DateTime: React.FC = () => {
     new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
   );
 
-  const dates: React.ReactNode[] = []; // JSX 요소를 저장하기 위해 타입 변경
+  const dates: { dateInfo: React.ReactNode; dayOfWeek: string }[] = [];
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedWeek, setSelectedWeek] = useState<number>(0);
 
@@ -34,12 +35,10 @@ const DateTime: React.FC = () => {
     handleDateChange(formattedDate);
   };
 
-  // 다음 주를 보여주기
   const handleNextWeek = () => {
     setSelectedWeek(selectedWeek + 1);
   };
 
-  // 이전 주를 보여주기
   const handlePrevWeek = () => {
     if (selectedWeek > 0) {
       setSelectedWeek(selectedWeek - 1);
@@ -52,13 +51,16 @@ const DateTime: React.FC = () => {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const dayOfWeek = date.toLocaleDateString("ko-KR", { weekday: "short" });
-    dates.push(
-      <div>
-        {`${month}/${day}`}
-        <br />
-        {`${dayOfWeek}`}
-      </div>
-    ); // JSX로 저장
+    dates.push({
+      dateInfo: (
+        <div>
+          {`${month}/${day}`}
+          <br />
+          {`${dayOfWeek}`}
+        </div>
+      ),
+      dayOfWeek: dayOfWeek,
+    });
   }
 
   const visibleDates = dates.slice(selectedWeek, selectedWeek + 7);
@@ -97,16 +99,30 @@ const DateTime: React.FC = () => {
           onClick={handlePrevWeek}
           disabled={selectedWeek === 0}
         />
-        {visibleDates.map((dateElement, index) => (
+        {visibleDates.map((date, index) => (
           <div key={index}>
             <ClickDate
               onClick={() => handleDateClick(selectedWeek + index)}
               isSelected={selectedWeek + index === selectedDate}
+              dayOfWeek={date.dayOfWeek}
             >
               <Button
-                text={dateElement}
+                text={date.dateInfo}
                 size="14px"
-                color="white"
+                color={
+                  selectedWeek + index === selectedDate
+                    ? "#007bff"
+                    : "transparent"
+                }
+                fontColor={
+                  selectedWeek + index === selectedDate
+                    ? "white"
+                    : date.dayOfWeek === "토"
+                    ? "blue"
+                    : date.dayOfWeek === "일"
+                    ? "red"
+                    : "black"
+                }
                 border="none"
                 borderRadius="20px"
               />
@@ -139,11 +155,16 @@ const Selection = styled.select`
 
 const ClickDate = styled.div<ClickableDateProps>`
   cursor: pointer;
-  background-color: ${(props) => (props.isSelected ? "black" : "transparent")};
-  padding: 5px;
+  background-color: ${(props) =>
+    props.isSelected ? "#007bff" : "transparent"};
+  padding: 10px;
   border-radius: 20px;
-`;
+  width: 40px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const DateContainer = styled.div`
   display: flex;
   flex-direction: row;
