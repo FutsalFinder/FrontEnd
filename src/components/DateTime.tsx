@@ -16,6 +16,7 @@ const DateTime: React.FC = () => {
   const dates: { dateInfo: React.ReactNode; dayOfWeek: string }[] = [];
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [selectedWeek, setSelectedWeek] = useState<number>(0);
+  const [bool, setBool] = useState<boolean>(true);
 
   const {
     handleDateChange,
@@ -48,6 +49,7 @@ const DateTime: React.FC = () => {
 
   const handleHideMatch = () => {
     toggleHideMatches();
+    setBool(!bool);
   };
 
   for (let i = 0; i < 13; i++) {
@@ -94,7 +96,7 @@ const DateTime: React.FC = () => {
             <option value="With">위드</option>
           </Selection>
           <Button
-            text={"마감 가리기"}
+            text={bool === true ? "마감 가리기" : "가리기 취소"}
             size="14px"
             color="white"
             border="1px solid"
