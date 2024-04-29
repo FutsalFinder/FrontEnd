@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 
-import LoaindgScreen from "../components/LoadingScreen";
+import Loading from "../components/Loading";
 
 interface Data {
   title: string;
@@ -21,15 +21,12 @@ interface Data {
   maxCount: number;
   link: string;
 }
-
 interface RegionMap {
   [key: string]: string;
 }
-
 interface SexMap {
   [key: string]: string;
 }
-
 interface DataContextType {
   region: string;
   sex: string;
@@ -40,21 +37,17 @@ interface DataContextType {
   handleSexChange: (selectedSex: string) => void;
   handlePlatformChange: (selectedPlatform: string) => void;
 }
-
 const DataContext = createContext<DataContextType | undefined>(undefined);
-
 export const useData = () => {
   const context = useContext(DataContext);
   if (context === undefined) {
-    throw new Error("Error");
+    throw new Error("useData must be used within a DataProvider");
   }
   return context;
 };
-
 interface DataProviderProps {
   children: ReactNode;
 }
-
 export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const koreanDate = new Intl.DateTimeFormat("ko-KR", {
     year: "numeric",
@@ -65,24 +58,22 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     .format(new Date())
     .replace(/\. /g, "-")
     .slice(0, -1);
-
   const [date, setDate] = useState<string>(koreanDate);
   const [region, setRegion] = useState<string>("0");
   const [sex, setSex] = useState<string>("0");
   const [platform, setPlatform] = useState<string>("");
   const [filteredData, setFilteredData] = useState<Data[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const queryParams = new URLSearchParams({
         region,
         sex,
         platform,
       });
-
-      const url = `http://localhost:8080/futsal-info/${date}`;
-
+      const url = `http://localhost:8080/futsal-info/2024-04-30`;
       try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -103,18 +94,14 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
           link: item.link,
         }));
         setFilteredData(transformedData);
+        setLoading(false);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
-      setIsLoading(false);
     };
 
     fetchData();
   }, [date, region, sex, platform]);
-
-  if (isLoading) {
-    return <LoaindgScreen />; // 로딩 상태일 때 로딩 스크린 표시
-  }
 
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
   const handleRegionChange = (selectedRegion: string) => {
@@ -125,30 +112,30 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
     };
     setRegion(regionMap[selectedRegion] || "0");
   };
-
   const handleSexChange = (selectedSex: string) => {
     const sexMap: SexMap = { 남성: "1", 여성: "-1", 혼성: "0" };
     setSex(sexMap[selectedSex] || "0");
   };
-
   const handlePlatformChange = (selectedPlatform: string) => {
     setPlatform(selectedPlatform);
   };
-
   return (
-    <DataContext.Provider
-      value={{
-        region,
-        sex,
-        platform,
-        filteredData,
-        handleDateChange,
-        handleRegionChange,
-        handleSexChange,
-        handlePlatformChange,
-      }}
-    >
-      {children}
-    </DataContext.Provider>
+    <>
+      {loading ? <Loading /> : null}
+      <DataContext.Provider
+        value={{
+          region,
+          sex,
+          platform,
+          filteredData,
+          handleDateChange,
+          handleRegionChange,
+          handleSexChange,
+          handlePlatformChange,
+        }}
+      >
+        {children}
+      </DataContext.Provider>
+    </>
   );
 };
