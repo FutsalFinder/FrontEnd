@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi"; // 돋보기 아이콘을 제공하는 라이브러리
 

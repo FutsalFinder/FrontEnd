@@ -61,6 +61,10 @@ const ButtonStyle = styled.button<{
   border: ${(props) => props.border};
   border-radius: ${(props) => props.borderRadius};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
+
+  @media (max-width: 768px) {
+    font-size: calc(${(props) => props.size} * 0.8);
+  }
 `;
 
 export default Button;

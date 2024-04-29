@@ -1,7 +1,5 @@
-import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
-import { useNavigate } from "react-router-dom";
 import NotFound from "./NotFound";
 
 interface PlatformProps {

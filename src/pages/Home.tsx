@@ -1,4 +1,3 @@
-import React from "react";
 import DateTime from "../components/DateTime";
 import Match from "../components/Match";
 import styled from "styled-components";
@@ -26,6 +25,10 @@ const ImgContainer = styled.div`
   text-align: center;
   background-color: black;
   width: 100%;
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 `;
 
 const DateStyle = styled.div`

@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -6,6 +5,10 @@ const Container = styled.div`
 `;
 const Text = styled.p`
   font-size: 32px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const NotFound = () => {

@@ -108,7 +108,7 @@ const DateTime: React.FC = () => {
       <DateContainer>
         <Button
           text={"<"}
-          size="10px"
+          size="14px"
           color="white"
           border="none"
           onClick={handlePrevWeek}
@@ -146,7 +146,7 @@ const DateTime: React.FC = () => {
         ))}
         <Button
           text={">"}
-          size="20px"
+          size="14px"
           color="white"
           border="none"
           onClick={handleNextWeek}
@@ -162,6 +162,9 @@ const DateHead = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin: 10px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const Selection = styled.select`
@@ -179,10 +182,13 @@ const ClickDate = styled.div<ClickableDateProps>`
   padding: 10px;
   border-radius: 20px;
   width: 40px;
-
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 5px;
+  }
 `;
 const DateContainer = styled.div`
   display: flex;
