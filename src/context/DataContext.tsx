@@ -66,7 +66,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const url = `http://localhost:8080/matches/${date}?region=0`;
+      const url = `http://localhost:8080/matches/${date}?region=${region}`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Network Error");
@@ -85,14 +85,14 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
           link: item.link,
         }));
         setData(transformedData);
-        setLoading(false);
       } catch (error) {
         console.error("데이터를 불러오는데 실패했습니다. ", error);
       }
+      setLoading(false);
     };
 
     fetchData();
-  }, [date]);
+  }, [date, region]);
 
   useEffect(() => {
     const applyFilters = () => {
@@ -129,8 +129,15 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   const toggleHideMatches = () => setHideMatches(!hideMatches);
 
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
-  const handleRegionChange = (selectedRegion: string) =>
-    setRegion(selectedRegion);
+  const handleRegionChange = (selectedRegion: string) => {
+    let regionValue = "0";
+    if (selectedRegion === "서울") {
+      regionValue = "1";
+    } else if (selectedRegion === "경기") {
+      regionValue = "2";
+    }
+    setRegion(regionValue);
+  };
   const handleSexChange = (selectedSex: string) => setSex(selectedSex);
   const handlePlatformChange = (selectedPlatform: string) =>
     setPlatform(selectedPlatform);
