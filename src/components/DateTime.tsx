@@ -22,6 +22,7 @@ const DateTime: React.FC = () => {
     handleRegionChange,
     handleSexChange,
     handlePlatformChange,
+    toggleHideMatches,
   } = useData();
 
   const handleDateClick = (index: number) => {
@@ -43,6 +44,10 @@ const DateTime: React.FC = () => {
     if (selectedWeek > 0) {
       setSelectedWeek(selectedWeek - 1);
     }
+  };
+
+  const handleHideMatch = () => {
+    toggleHideMatches();
   };
 
   for (let i = 0; i < 13; i++) {
@@ -71,7 +76,7 @@ const DateTime: React.FC = () => {
         <h3>날짜 선택</h3>
         <div>
           <Selection onChange={(e) => handleRegionChange(e.target.value)}>
-            <option value="">지역 보기</option>
+            <option value="">지역</option>
             <option value="서울">서울</option>
             <option value="경기">경기</option>
           </Selection>
@@ -88,12 +93,20 @@ const DateTime: React.FC = () => {
             <option value="Iam">아이엠</option>
             <option value="With">위드</option>
           </Selection>
+          <Button
+            text={"마감 가리기"}
+            size="14px"
+            color="white"
+            border="1px solid"
+            borderRadius="8px"
+            onClick={handleHideMatch}
+          />
         </div>
       </DateHead>
       <DateContainer>
         <Button
           text={"<"}
-          size="20px"
+          size="10px"
           color="white"
           border="none"
           onClick={handlePrevWeek}
@@ -150,7 +163,11 @@ const DateHead = styled.div`
 `;
 
 const Selection = styled.select`
-  border: none;
+  border: 1px solid;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0.75px;
+  width: 60px;
 `;
 
 const ClickDate = styled.div<ClickableDateProps>`

@@ -30,6 +30,7 @@ interface DataContextType {
   handleRegionChange: (selectedRegion: string) => void;
   handleSexChange: (selectedSex: string) => void;
   handlePlatformChange: (selectedPlatform: string) => void;
+  toggleHideMatches: () => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -60,11 +61,12 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   const [data, setData] = useState<Data[]>([]);
   const [filteredData, setFilteredData] = useState<Data[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hideMatches, setHideMatches] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const url = `http://localhost:8080/futsal-info/${date}`;
+      const url = `http://localhost:8080/matches/${date}?region=0`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Network Error");
@@ -114,11 +116,18 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
         filtered = filtered.filter((item) => item.platform === platform);
       }
 
+      if (hideMatches) {
+        filtered = filtered.filter((item) => item.curCount < item.maxCount);
+      }
+
       setFilteredData(filtered);
     };
 
     applyFilters();
-  }, [data, sex, platform]);
+  }, [data, sex, platform, hideMatches]);
+
+  const toggleHideMatches = () => setHideMatches(!hideMatches);
+
   const handleDateChange = (selectedDate: string) => setDate(selectedDate);
   const handleRegionChange = (selectedRegion: string) =>
     setRegion(selectedRegion);
@@ -139,6 +148,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
           handleRegionChange,
           handleSexChange,
           handlePlatformChange,
+          toggleHideMatches,
         }}
       >
         {children}
