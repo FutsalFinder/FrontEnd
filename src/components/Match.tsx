@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
+import NotFound from "./NotFound";
 
 interface PlatformProps {
   platform: string;
@@ -19,7 +20,9 @@ const Match = () => {
     window.location.href = url;
   };
 
-  return (
+  return filteredData.length === 0 ? (
+    <NotFound />
+  ) : (
     <MathchStyle>
       {filteredData.map((item, idx) => (
         <MatchContainer key={idx} onClick={() => navigateLink(item.link)}>
