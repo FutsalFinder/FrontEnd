@@ -61,7 +61,7 @@ const DateTime: React.FC = () => {
     dates.push({
       dateInfo: (
         <div>
-          {`${month}/${day}`}
+          {`${day}`}
           <br />
           {`${dayOfWeek}`}
         </div>
@@ -196,8 +196,8 @@ const ClickDate = styled.div<ClickableDateProps>`
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 12px;
-    width: 12px;
+    padding: 10px;
+    width: 16px;
   }
 `;
 const DateContainer = styled.div`

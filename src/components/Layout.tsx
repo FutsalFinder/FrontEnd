@@ -20,6 +20,9 @@ const LayoutStyle = styled.main`
   box-sizing: border-box;
   text-align: center;
   width: 100%;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
 `;
 
 export default Layout;
