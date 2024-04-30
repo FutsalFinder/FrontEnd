@@ -55,7 +55,7 @@ const DateTime: React.FC = () => {
   for (let i = 0; i < 13; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
-    const month = date.getMonth() + 1;
+    // const month = date.getMonth() + 1;
     const day = date.getDate();
     const dayOfWeek = date.toLocaleDateString("ko-KR", { weekday: "short" });
     dates.push({
