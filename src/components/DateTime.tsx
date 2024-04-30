@@ -75,8 +75,8 @@ const DateTime: React.FC = () => {
   return (
     <>
       <DateHead>
-        <h3>날짜 선택</h3>
-        <div>
+        <Text>날짜 선택</Text>
+        <SelectContainer>
           <Selection onChange={(e) => handleRegionChange(e.target.value)}>
             <option value="">지역</option>
             <option value="서울">서울</option>
@@ -103,12 +103,12 @@ const DateTime: React.FC = () => {
             borderRadius="8px"
             onClick={handleHideMatch}
           />
-        </div>
+        </SelectContainer>
       </DateHead>
       <DateContainer>
         <Button
           text={"<"}
-          size="14px"
+          size="20px"
           color="white"
           border="none"
           onClick={handlePrevWeek}
@@ -146,7 +146,7 @@ const DateTime: React.FC = () => {
         ))}
         <Button
           text={">"}
-          size="14px"
+          size="20px"
           color="white"
           border="none"
           onClick={handleNextWeek}
@@ -164,7 +164,16 @@ const DateHead = styled.div`
   margin: 10px;
   @media screen and (max-width: 768px) {
     width: 100%;
+    justify-content: space-evenly;
   }
+`;
+
+const Text = styled.h3`
+  margin-top: 0px;
+`;
+const SelectContainer = styled.div`
+  display: flex;
+  height: 20px;
 `;
 
 const Selection = styled.select`
@@ -179,7 +188,7 @@ const ClickDate = styled.div<ClickableDateProps>`
   cursor: pointer;
   background-color: ${(props) =>
     props.isSelected ? "#007bff" : "transparent"};
-  padding: 10px;
+  padding: 12px;
   border-radius: 20px;
   width: 40px;
   display: flex;
@@ -187,8 +196,8 @@ const ClickDate = styled.div<ClickableDateProps>`
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 5px;
-    width: 20px;
+    padding: 12px;
+    width: 16px;
   }
 `;
 const DateContainer = styled.div`
