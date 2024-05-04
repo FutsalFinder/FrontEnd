@@ -66,11 +66,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-
+      const url = `http://localhost:8080/matches/${date}?region=${region}`;
       try {
-        const response = await fetch(
-          `/api/getData?date=${date}&region=${region}`
-        );
+        const response = await fetch(url);
         if (!response.ok) throw new Error("Network Error");
         const rawData = await response.json();
         const transformedData = rawData.map((item: any) => ({
