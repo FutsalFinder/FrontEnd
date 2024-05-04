@@ -66,7 +66,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const url = `https://localhost:8081/matches/${date}?region=${region}`;
+      const url = `https://13.209.14.189:8081/matches/${date}?region=${region}`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("Network Error");
