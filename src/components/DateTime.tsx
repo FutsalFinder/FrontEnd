@@ -52,7 +52,7 @@ const DateTime: React.FC = () => {
     setBool(!bool);
   };
 
-  for (let i = 0; i < 13; i++) {
+  for (let i = 0; i < 15; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
     // const month = date.getMonth() + 1;
@@ -124,11 +124,7 @@ const DateTime: React.FC = () => {
               <Button
                 text={date.dateInfo}
                 size="14px"
-                color={
-                  selectedWeek + index === selectedDate
-                    ? "#007bff"
-                    : "transparent"
-                }
+                color={"transparent"}
                 fontColor={
                   selectedWeek + index === selectedDate
                     ? "white"

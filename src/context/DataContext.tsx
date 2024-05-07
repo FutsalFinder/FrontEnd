@@ -66,10 +66,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const url = `https://13.209.14.189:8081/matches/${date}?region=${region}`;
+      const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error("Network Error");
+        if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
         const rawData = await response.json();
         const transformedData = rawData.map((item: any) => ({
           title: item.match_title,
