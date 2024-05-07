@@ -27,7 +27,8 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.div`
-  font: 1rem "Noto Sans KR";
+  font: 1.5rem "Noto Sans KR";
+
   text-align: center;
 `;
 
