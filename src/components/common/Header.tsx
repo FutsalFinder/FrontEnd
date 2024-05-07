@@ -14,7 +14,7 @@ const Header = () => {
 };
 const HeaderStyle = styled.div`
   width: 100%;
-  padding: 0px 10px;
+
   display: flex;
   align-items: center;
   flex-direction: row;
