@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { FiSearch } from "react-icons/fi"; // 돋보기 아이콘을 제공하는 라이브러리
+import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   return (
     <HeaderStyle>
-      <Title>Futsal Finder</Title>
+      <Title onClick={() => window.location.reload()}>Futsal Finder</Title>
       <SearchInputContainer>
         <FiSearchIcon />
         <SearchInput type="search" placeholder="구장을 검색하세요." />
@@ -12,7 +13,6 @@ const Header = () => {
     </HeaderStyle>
   );
 };
-
 const HeaderStyle = styled.div`
   width: 100%;
   padding: 0px 10px;
@@ -45,6 +45,7 @@ const FiSearchIcon = styled(FiSearch)`
 `;
 
 const Title = styled.h1`
+  font-family: "Arial", sans-serif;
   @media screen and (max-width: 768px) {
     font-size: 20px;
   }
