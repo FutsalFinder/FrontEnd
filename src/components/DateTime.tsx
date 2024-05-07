@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useSwipeable } from "react-swipeable";
+import { useMediaQuery } from "react-responsive";
 import Button from "./common/Button";
 import { useData } from "../context/DataContext";
 
@@ -55,7 +57,6 @@ const DateTime: React.FC = () => {
   for (let i = 0; i < 15; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
-    // const month = date.getMonth() + 1;
     const day = date.getDate();
     const dayOfWeek = date.toLocaleDateString("ko-KR", { weekday: "short" });
     dates.push({
@@ -71,6 +72,15 @@ const DateTime: React.FC = () => {
   }
 
   const visibleDates = dates.slice(selectedWeek, selectedWeek + 7);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () =>
+      setSelectedWeek((prev) => Math.min(prev + 1, dates.length - 7)),
+    onSwipedRight: () => setSelectedWeek((prev) => Math.max(prev - 1, 0)),
+    preventScrollOnSwipe: true,
+    trackMouse: false,
+  });
 
   return (
     <>
@@ -105,15 +115,17 @@ const DateTime: React.FC = () => {
           />
         </SelectContainer>
       </DateHead>
-      <DateContainer>
-        <Button
-          text={"<"}
-          size="20px"
-          color="white"
-          border="none"
-          onClick={handlePrevWeek}
-          disabled={selectedWeek === 0}
-        />
+      <DateContainer {...swipeHandlers}>
+        {!isMobile && (
+          <Button
+            text={"<"}
+            size="20px"
+            color="white"
+            border="none"
+            onClick={() => setSelectedWeek((prev) => Math.max(prev - 1, 0))}
+            disabled={selectedWeek === 0}
+          />
+        )}
         {visibleDates.map((date, index) => (
           <div key={index}>
             <ClickDate
@@ -124,15 +136,15 @@ const DateTime: React.FC = () => {
               <Button
                 text={date.dateInfo}
                 size="14px"
-                color={"transparent"}
+                color={
+                  selectedWeek + index === selectedDate
+                    ? "#007bff"
+                    : "transparent"
+                }
                 fontColor={
                   selectedWeek + index === selectedDate
                     ? "white"
-                    : date.dayOfWeek === "토"
-                    ? "blue"
-                    : date.dayOfWeek === "일"
-                    ? "red"
-                    : "black"
+                    : dayOfWeekColor(date.dayOfWeek)
                 }
                 border="none"
                 borderRadius="20px"
@@ -140,18 +152,28 @@ const DateTime: React.FC = () => {
             </ClickDate>
           </div>
         ))}
-        <Button
-          text={">"}
-          size="20px"
-          color="white"
-          border="none"
-          onClick={handleNextWeek}
-          disabled={selectedWeek + 7 >= dates.length}
-        />
+        {!isMobile && (
+          <Button
+            text={">"}
+            size="20px"
+            color="white"
+            border="none"
+            onClick={() =>
+              setSelectedWeek((prev) => Math.min(prev + 1, dates.length - 7))
+            }
+            disabled={selectedWeek + 7 >= dates.length}
+          />
+        )}
       </DateContainer>
     </>
   );
 };
+
+function dayOfWeekColor(dayOfWeek: string) {
+  if (dayOfWeek === "토") return "blue";
+  if (dayOfWeek === "일") return "red";
+  return "black";
+}
 
 const DateHead = styled.div`
   display: flex;
@@ -166,6 +188,7 @@ const DateHead = styled.div`
 
 const Text = styled.h3`
   margin-top: 0px;
+  font-weight: 700;
 `;
 const SelectContainer = styled.div`
   display: flex;
