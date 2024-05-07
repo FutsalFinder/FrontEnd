@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { FiSearch } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   return (
