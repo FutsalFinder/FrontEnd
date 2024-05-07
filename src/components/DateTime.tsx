@@ -122,7 +122,7 @@ const DateTime: React.FC = () => {
             size="20px"
             color="white"
             border="none"
-            onClick={() => setSelectedWeek((prev) => Math.max(prev - 1, 0))}
+            onClick={handlePrevWeek}
             disabled={selectedWeek === 0}
           />
         )}
@@ -158,9 +158,7 @@ const DateTime: React.FC = () => {
             size="20px"
             color="white"
             border="none"
-            onClick={() =>
-              setSelectedWeek((prev) => Math.min(prev + 1, dates.length - 7))
-            }
+            onClick={handleNextWeek}
             disabled={selectedWeek + 7 >= dates.length}
           />
         )}
