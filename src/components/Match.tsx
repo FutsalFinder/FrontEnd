@@ -61,15 +61,15 @@ const MatchContainer = styled.div`
   width: 100%;
   padding: 0px 5px;
 
-  grid-template-columns: 0.33fr 0.001fr 0.58fr 0.1fr;
+  grid-template-columns: 0.35fr 0fr 0.7fr 0.1fr;
   grid-gap: 10px;
   border-bottom: 0.3px solid;
 
   @media screen and (max-width: 768px) {
-    margin-left: 10px;
+    margin-left: 4px;
     width: 100%;
     grid-gap: 10px;
-    grid-template-columns: 0.2fr 0fr 0.75fr 0.3fr;
+    grid-template-columns: 0.1fr 0fr 0.8fr 0.3fr;
   }
 `;
 const Time = styled.h1`

@@ -190,7 +190,7 @@ const Text = styled.h3`
 `;
 const SelectContainer = styled.div`
   display: flex;
-  height: 20px;
+  height: 22px;
 `;
 
 const Selection = styled.select`
