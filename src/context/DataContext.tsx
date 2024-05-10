@@ -97,7 +97,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const applyFilters = () => {
-      let filtered = data;
+      let filtered = data.filter(
+        (item) => !isNaN(item.curCount) || !isNaN(item.maxCount)
+      );
 
       if (sex === "남녀모두") {
         filtered = filtered.filter((item) => item.sex === "남녀모두");
