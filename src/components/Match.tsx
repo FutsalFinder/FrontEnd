@@ -46,9 +46,9 @@ const Match = () => {
                 </span>
                 {`${item.sex}•`}
               </ItemList>
-              <ItemList>{item.level}•</ItemList>
-              <ItemList>{item.matchType}•</ItemList>
-              <ItemList>{item.matchChar}</ItemList>
+              <ItemList>{item.level}</ItemList>
+              <ItemList>•{item.matchType}</ItemList>
+              <ItemList>•{item.matchChar}</ItemList>
             </Item>
           </div>
           <Info>
