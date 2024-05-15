@@ -249,6 +249,7 @@ const ClickDate = styled.div<ClickableDateProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 4px;
 
   @media (max-width: 768px) {
     padding: 10px;
