@@ -52,7 +52,11 @@ const Match = () => {
             </Item>
           </div>
           <Info>
-            <div>{`${item.curCount}/${item.maxCount}`}</div>
+            <CountContainer>
+              <Count>{item.curCount}</Count>
+              <span>/</span>
+              <Count>{item.maxCount}</Count>
+            </CountContainer>
           </Info>
         </MatchContainer>
       ))}
@@ -86,6 +90,7 @@ const MatchContainer = styled.div`
     grid-template-columns: 0fr 0fr 0.95fr 0.15fr;
   }
 `;
+
 const Time = styled.h1`
   margin: auto;
   min-width: 60px;
@@ -115,7 +120,7 @@ const ItemList = styled.span`
   align-items: center;
 
   @media screen and (max-width: 768px) {
-    font-size: 8px;
+    font-size: 7.7px;
   }
 
   span {
@@ -127,6 +132,17 @@ const Info = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+`;
+
+const CountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  min-width: 60px; /* Ensure consistent width */
+`;
+
+const Count = styled.div`
+  text-align: right; /* Ensure alignment within the flex container */
+  width: 20px; /* Set a fixed width for each count to maintain alignment */
 `;
 
 const PlatformStyle = styled.div<PlatformProps>`
