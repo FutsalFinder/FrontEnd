@@ -31,9 +31,23 @@ const Match = () => {
           <div>
             <MatchTitle>{item.title}</MatchTitle>
             <Item>
-              <ItemList>{item.sex}</ItemList>
-              <ItemList>{item.level}</ItemList>
-              <ItemList>{item.matchType}</ItemList>
+              <ItemList>
+                <span
+                  style={{
+                    color:
+                      item.sex === "남자"
+                        ? "blue"
+                        : item.sex === "여자"
+                        ? "red"
+                        : "#FFBB00",
+                  }}
+                >
+                  •
+                </span>
+                {` ${item.sex} •`}
+              </ItemList>
+              <ItemList>{item.level} •</ItemList>
+              <ItemList>{item.matchType} •</ItemList>
               <ItemList>{item.matchChar}</ItemList>
             </Item>
           </div>
@@ -61,7 +75,7 @@ const MatchContainer = styled.div`
   width: 100%;
   padding: 0px 5px;
 
-  grid-template-columns: 0.35fr 0fr 0.7fr 0.1fr;
+  grid-template-columns: 0.35fr 0fr 0.75fr 0.1fr;
   grid-gap: 10px;
   border-bottom: 0.3px solid;
 
@@ -69,7 +83,7 @@ const MatchContainer = styled.div`
     margin-left: 4px;
     width: 100%;
     grid-gap: 10px;
-    grid-template-columns: 0.1fr 0fr 0.8fr 0.3fr;
+    grid-template-columns: 0fr 0fr 0.95fr 0.15fr;
   }
 `;
 const Time = styled.h1`
@@ -89,19 +103,23 @@ const MatchTitle = styled.h4`
 const Item = styled.div`
   margin: 10px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 `;
 
 const ItemList = styled.span`
-  border: 0.5px solid;
   border-radius: 8px;
-  color: white;
-  padding: 4px;
-  background-color: grey;
+  color: grey;
+
+  display: flex;
+  align-items: center;
 
   @media screen and (max-width: 768px) {
-    padding: 4px;
     font-size: 8px;
+  }
+
+  span {
+    margin-right: 5px;
   }
 `;
 
@@ -126,13 +144,13 @@ const PlatformStyle = styled.div<PlatformProps>`
   background-color: ${(props) => {
     switch (props.platform) {
       case "Plab":
-        return "blue";
+        return "#6799FF";
       case "Puzzle":
-        return "green";
+        return "#86E57F";
       case "Iam":
-        return "red";
+        return "#F15F5F";
       case "With":
-        return "orange";
+        return "#FFE400";
       default:
         return "grey";
     }
