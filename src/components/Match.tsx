@@ -44,10 +44,10 @@ const Match = () => {
                 >
                   •
                 </span>
-                {` ${item.sex} •`}
+                {`${item.sex}•`}
               </ItemList>
-              <ItemList>{item.level} •</ItemList>
-              <ItemList>{item.matchType} •</ItemList>
+              <ItemList>{item.level}•</ItemList>
+              <ItemList>{item.matchType}•</ItemList>
               <ItemList>{item.matchChar}</ItemList>
             </Item>
           </div>
@@ -120,7 +120,7 @@ const ItemList = styled.span`
   align-items: center;
 
   @media screen and (max-width: 768px) {
-    font-size: 7.7px;
+    font-size: 8px;
   }
 
   span {
