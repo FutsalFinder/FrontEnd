@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { useSwipeable } from "react-swipeable";
+import styled from "styled-components";
+import Slider from "react-slick";
 import { useMediaQuery } from "react-responsive";
 import Button from "./common/Button";
 import { useData } from "../context/DataContext";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 interface ClickableDateProps {
   isSelected: boolean;
@@ -71,36 +73,23 @@ const DateTime: React.FC = () => {
     });
   }
 
-  const visibleDates = dates.slice(selectedWeek, selectedWeek + 7);
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: (eventData) => handleSwipe("left", eventData.deltaX),
-    onSwipedRight: (eventData) => handleSwipe("right", eventData.deltaX),
-    preventScrollOnSwipe: true,
-    trackMouse: false,
-  });
+  const mobileSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    swipeToSlide: true, // 스와이프한 만큼 넘어가도록 설정
+  };
 
-  const handleSwipe = (direction: string, deltaX: number) => {
-    const swipeDistance = Math.abs(deltaX);
-    const swipeThreshold = 50; // 스와이프 간격 기준 설정 (예: 50px)
-    const weeksToMove = Math.ceil(swipeDistance / swipeThreshold);
-
-    const container = document.getElementById("date-container");
-    if (container) {
-      container.classList.remove("swipe-left", "swipe-right");
-      void container.offsetWidth; // trigger reflow
-      container.classList.add(`swipe-${direction}`);
-      setTimeout(() => {
-        container.classList.remove(`swipe-${direction}`);
-      }, 300); // match duration with animation duration
-    }
-
-    if (direction === "left") {
-      setSelectedWeek((prev) => Math.min(prev + weeksToMove, dates.length - 7));
-    } else if (direction === "right") {
-      setSelectedWeek((prev) => Math.max(prev - weeksToMove, 0));
-    }
+  const desktopSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 7,
+    slidesToScroll: 1,
   };
 
   return (
@@ -136,8 +125,35 @@ const DateTime: React.FC = () => {
           />
         </SelectContainer>
       </DateHead>
-      <DateContainer id="date-container" {...swipeHandlers}>
-        {!isMobile && (
+      {isMobile ? (
+        <SliderContainer>
+          <Slider {...mobileSettings}>
+            {dates.map((date, index) => (
+              <div key={index}>
+                <ClickDate
+                  onClick={() => handleDateClick(index)}
+                  isSelected={index === selectedDate}
+                  dayOfWeek={date.dayOfWeek}
+                >
+                  <Button
+                    text={date.dateInfo}
+                    size="14px"
+                    color={index === selectedDate ? "#007bff" : "transparent"}
+                    fontColor={
+                      index === selectedDate
+                        ? "white"
+                        : dayOfWeekColor(date.dayOfWeek)
+                    }
+                    border="none"
+                    borderRadius="20px"
+                  />
+                </ClickDate>
+              </div>
+            ))}
+          </Slider>
+        </SliderContainer>
+      ) : (
+        <DateContainer id="date-container">
           <Button
             text={"<"}
             size="20px"
@@ -146,34 +162,32 @@ const DateTime: React.FC = () => {
             onClick={handlePrevWeek}
             disabled={selectedWeek === 0}
           />
-        )}
-        {visibleDates.map((date, index) => (
-          <div key={index}>
-            <ClickDate
-              onClick={() => handleDateClick(selectedWeek + index)}
-              isSelected={selectedWeek + index === selectedDate}
-              dayOfWeek={date.dayOfWeek}
-            >
-              <Button
-                text={date.dateInfo}
-                size="14px"
-                color={
-                  selectedWeek + index === selectedDate
-                    ? "#007bff"
-                    : "transparent"
-                }
-                fontColor={
-                  selectedWeek + index === selectedDate
-                    ? "white"
-                    : dayOfWeekColor(date.dayOfWeek)
-                }
-                border="none"
-                borderRadius="20px"
-              />
-            </ClickDate>
-          </div>
-        ))}
-        {!isMobile && (
+          {dates.slice(selectedWeek, selectedWeek + 7).map((date, index) => (
+            <div key={index}>
+              <ClickDate
+                onClick={() => handleDateClick(selectedWeek + index)}
+                isSelected={selectedWeek + index === selectedDate}
+                dayOfWeek={date.dayOfWeek}
+              >
+                <Button
+                  text={date.dateInfo}
+                  size="14px"
+                  color={
+                    selectedWeek + index === selectedDate
+                      ? "#007bff"
+                      : "transparent"
+                  }
+                  fontColor={
+                    selectedWeek + index === selectedDate
+                      ? "white"
+                      : dayOfWeekColor(date.dayOfWeek)
+                  }
+                  border="none"
+                  borderRadius="20px"
+                />
+              </ClickDate>
+            </div>
+          ))}
           <Button
             text={">"}
             size="20px"
@@ -182,8 +196,8 @@ const DateTime: React.FC = () => {
             onClick={handleNextWeek}
             disabled={selectedWeek + 7 >= dates.length}
           />
-        )}
-      </DateContainer>
+        </DateContainer>
+      )}
     </>
   );
 };
@@ -193,24 +207,6 @@ function dayOfWeekColor(dayOfWeek: string) {
   if (dayOfWeek === "일") return "red";
   return "black";
 }
-
-const swipeLeft = keyframes`
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-`;
-
-const swipeRight = keyframes`
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-`;
 
 const DateHead = styled.div`
   display: flex;
@@ -226,11 +222,21 @@ const DateHead = styled.div`
 const Text = styled.h3`
   margin-top: 0px;
   font-weight: 700;
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+    margin-left: -13px;
+  }
 `;
+
 const SelectContainer = styled.div`
   display: flex;
   height: 22px;
   gap: 10px;
+
+  @media screen and (max-width: 768px) {
+    gap: 4px;
+  }
 `;
 
 const Selection = styled.select`
@@ -257,15 +263,19 @@ const ClickDate = styled.div<ClickableDateProps>`
     width: 16px;
   }
 `;
+
 const DateContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  &.swipe-left {
-    animation: ${swipeLeft} 0.3s forwards;
-  }
-  &.swipe-right {
-    animation: ${swipeRight} 0.3s forwards;
+  align-items: center;
+`;
+
+const SliderContainer = styled.div`
+  width: 100%;
+  .slick-slide > div {
+    display: flex;
+    justify-content: center;
   }
 `;
 
