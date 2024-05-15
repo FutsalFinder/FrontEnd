@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useSwipeable } from "react-swipeable";
 import { useMediaQuery } from "react-responsive";
 import Button from "./common/Button";
@@ -75,12 +75,33 @@ const DateTime: React.FC = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () =>
-      setSelectedWeek((prev) => Math.min(prev + 1, dates.length - 7)),
-    onSwipedRight: () => setSelectedWeek((prev) => Math.max(prev - 1, 0)),
+    onSwipedLeft: (eventData) => handleSwipe("left", eventData.deltaX),
+    onSwipedRight: (eventData) => handleSwipe("right", eventData.deltaX),
     preventScrollOnSwipe: true,
     trackMouse: false,
   });
+
+  const handleSwipe = (direction: string, deltaX: number) => {
+    const swipeDistance = Math.abs(deltaX);
+    const swipeThreshold = 50; // 스와이프 간격 기준 설정 (예: 50px)
+    const weeksToMove = Math.ceil(swipeDistance / swipeThreshold);
+
+    const container = document.getElementById("date-container");
+    if (container) {
+      container.classList.remove("swipe-left", "swipe-right");
+      void container.offsetWidth; // trigger reflow
+      container.classList.add(`swipe-${direction}`);
+      setTimeout(() => {
+        container.classList.remove(`swipe-${direction}`);
+      }, 300); // match duration with animation duration
+    }
+
+    if (direction === "left") {
+      setSelectedWeek((prev) => Math.min(prev + weeksToMove, dates.length - 7));
+    } else if (direction === "right") {
+      setSelectedWeek((prev) => Math.max(prev - weeksToMove, 0));
+    }
+  };
 
   return (
     <>
@@ -115,7 +136,7 @@ const DateTime: React.FC = () => {
           />
         </SelectContainer>
       </DateHead>
-      <DateContainer {...swipeHandlers}>
+      <DateContainer id="date-container" {...swipeHandlers}>
         {!isMobile && (
           <Button
             text={"<"}
@@ -173,6 +194,24 @@ function dayOfWeekColor(dayOfWeek: string) {
   return "black";
 }
 
+const swipeLeft = keyframes`
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+`;
+
+const swipeRight = keyframes`
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+`;
+
 const DateHead = styled.div`
   display: flex;
   flex-direction: row;
@@ -222,6 +261,12 @@ const DateContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  &.swipe-left {
+    animation: ${swipeLeft} 0.3s forwards;
+  }
+  &.swipe-right {
+    animation: ${swipeRight} 0.3s forwards;
+  }
 `;
 
 export default DateTime;
