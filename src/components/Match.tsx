@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
 import NotFound from "./NotFound";
@@ -16,57 +17,63 @@ const Match = () => {
     window.open(url, "_blank");
   };
 
-  return (
-    <MatchStyle>
-      {loading ? (
+  if (loading) {
+    return (
+      <MatchStyle>
         <LoadingWrapper>
           <Loading />
         </LoadingWrapper>
-      ) : filteredData.length === 0 ? (
-        <NotFound />
-      ) : (
-        filteredData.map((item, idx) => (
-          <MatchContainer key={idx} onClick={() => navigateLink(item.link)}>
-            <Info>
-              <Time>{item.time}</Time>
-              <PlatformStyle platform={item.platform}>
-                {item.platform.replace("아이엠그라운드", "아이엠\n그라운드")}
-              </PlatformStyle>
-            </Info>
-            <h4></h4>
-            <div>
-              <MatchTitle>{item.title}</MatchTitle>
-              <Item>
-                <ItemList>
-                  <span
-                    style={{
-                      color:
-                        item.sex === "남자"
-                          ? "blue"
-                          : item.sex === "여자"
-                          ? "red"
-                          : "#FFBB00",
-                    }}
-                  >
-                    •
-                  </span>
-                  {`${item.sex}•`}
-                </ItemList>
-                <ItemList>{item.level}</ItemList>
-                <ItemList>•{item.matchType}</ItemList>
-                <ItemList>•{item.matchChar}</ItemList>
-              </Item>
-            </div>
-            <Info>
-              <CountContainer>
-                <Count>{item.curCount}</Count>
-                <span>/</span>
-                <Count>{item.maxCount}</Count>
-              </CountContainer>
-            </Info>
-          </MatchContainer>
-        ))
-      )}
+      </MatchStyle>
+    );
+  }
+
+  if (!loading && filteredData.length === 0) {
+    return <NotFound />;
+  }
+
+  return (
+    <MatchStyle>
+      {filteredData.map((item, idx) => (
+        <MatchContainer key={idx} onClick={() => navigateLink(item.link)}>
+          <Info>
+            <Time>{item.time}</Time>
+            <PlatformStyle platform={item.platform}>
+              {item.platform.replace("아이엠그라운드", "아이엠\n그라운드")}
+            </PlatformStyle>
+          </Info>
+          <h4></h4>
+          <div>
+            <MatchTitle>{item.title}</MatchTitle>
+            <Item>
+              <ItemList>
+                <span
+                  style={{
+                    color:
+                      item.sex === "남자"
+                        ? "blue"
+                        : item.sex === "여자"
+                        ? "red"
+                        : "#FFBB00",
+                  }}
+                >
+                  •
+                </span>
+                {`${item.sex}•`}
+              </ItemList>
+              <ItemList>{item.level}</ItemList>
+              <ItemList>•{item.matchType}</ItemList>
+              <ItemList>•{item.matchChar}</ItemList>
+            </Item>
+          </div>
+          <Info>
+            <CountContainer>
+              <Count>{item.curCount}</Count>
+              <span>/</span>
+              <Count>{item.maxCount}</Count>
+            </CountContainer>
+          </Info>
+        </MatchContainer>
+      ))}
     </MatchStyle>
   );
 };
@@ -163,8 +170,8 @@ const CountContainer = styled.div`
 `;
 
 const Count = styled.div`
-  text-align: right;
-  width: 20px;
+  text-align: right; /* Ensure alignment within the flex container */
+  width: 20px; /* Set a fixed width for each count to maintain alignment */
 `;
 
 const PlatformStyle = styled.div<PlatformProps>`
