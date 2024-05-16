@@ -120,7 +120,7 @@ const ItemList = styled.span`
   align-items: center;
 
   @media screen and (max-width: 768px) {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   span {
@@ -154,8 +154,9 @@ const PlatformStyle = styled.div<PlatformProps>`
   text-align: center;
   white-space: pre-wrap;
   @media screen and (max-width: 768px) {
-    padding: 2px;
-    font-size: 12px;
+    padding: 4px;
+    min-width: 32px;
+    font-size: 11px;
   }
   background-color: ${(props) => {
     switch (props.platform) {
