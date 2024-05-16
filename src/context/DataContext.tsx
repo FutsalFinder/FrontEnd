@@ -66,8 +66,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const url = `http://localhost:8080/matches/${date}?region=${region}`;
-      // const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
+      const baseUrl = process.env.REACT_APP_API_URL;
+      const url = `${baseUrl}${date}?region=${region}`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
