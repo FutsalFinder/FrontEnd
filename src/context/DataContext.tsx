@@ -5,7 +5,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import Loading from "../components/Loading";
 
 interface Data {
   title: string;
@@ -26,6 +25,7 @@ interface DataContextType {
   sex: string;
   platform: string;
   filteredData: Data[];
+  loading: boolean;
   handleDateChange: (date: string) => void;
   handleRegionChange: (selectedRegion: string) => void;
   handleSexChange: (selectedSex: string) => void;
@@ -66,8 +66,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      // const url = `http://localhost:8080/matches/${date}?region=${region}`;
-      const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
+      const url = `http://localhost:8080/matches/${date}?region=${region}`;
+      // const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
@@ -146,23 +146,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
     setPlatform(selectedPlatform);
 
   return (
-    <>
-      {loading ? <Loading /> : null}
-      <DataContext.Provider
-        value={{
-          region,
-          sex,
-          platform,
-          filteredData,
-          handleDateChange,
-          handleRegionChange,
-          handleSexChange,
-          handlePlatformChange,
-          toggleHideMatches,
-        }}
-      >
-        {children}
-      </DataContext.Provider>
-    </>
+    <DataContext.Provider
+      value={{
+        region,
+        sex,
+        platform,
+        filteredData,
+        loading,
+        handleDateChange,
+        handleRegionChange,
+        handleSexChange,
+        handlePlatformChange,
+        toggleHideMatches,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
   );
 };
