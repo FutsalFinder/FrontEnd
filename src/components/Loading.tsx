@@ -4,10 +4,8 @@ import { useEffect } from "react";
 
 const Loading = () => {
   useEffect(() => {
-    // 로딩 중에 스크롤 방지
     document.body.style.overflow = "hidden";
     return () => {
-      // 로딩이 끝나면 스크롤 복원
       document.body.style.overflow = "auto";
     };
   }, []);

@@ -5,6 +5,8 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import Loading from "../components/Loading";
+import styled from "styled-components";
 
 interface Data {
   title: string;
@@ -25,7 +27,6 @@ interface DataContextType {
   sex: string;
   platform: string;
   filteredData: Data[];
-  loading: boolean;
   handleDateChange: (date: string) => void;
   handleRegionChange: (selectedRegion: string) => void;
   handleSexChange: (selectedSex: string) => void;
@@ -66,8 +67,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      // const url = `http://localhost:8080/matches/${date}?region=${region}`;
       const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
-      console.log(url);
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
@@ -152,7 +153,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
         sex,
         platform,
         filteredData,
-        loading,
         handleDateChange,
         handleRegionChange,
         handleSexChange,
@@ -160,7 +160,14 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
         toggleHideMatches,
       }}
     >
-      {children}
+      <DataWrapper>
+        {loading && <Loading />}
+        {children}
+      </DataWrapper>
     </DataContext.Provider>
   );
 };
+
+const DataWrapper = styled.div`
+  position: relative;
+`;

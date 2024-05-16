@@ -1,15 +1,13 @@
-import React from "react";
 import styled from "styled-components";
 import { useData } from "../context/DataContext";
 import NotFound from "./NotFound";
-import Loading from "../components/Loading";
 
 interface PlatformProps {
   platform: string;
 }
 
 const Match = () => {
-  const { filteredData, loading } = useData();
+  const { filteredData } = useData();
   const navigateLink = (url: string) => {
     if (!/^(http|https):\/\//.test(url)) {
       url = `https://${url}`;
@@ -17,21 +15,9 @@ const Match = () => {
     window.open(url, "_blank");
   };
 
-  if (loading) {
-    return (
-      <MatchStyle>
-        <LoadingWrapper>
-          <Loading />
-        </LoadingWrapper>
-      </MatchStyle>
-    );
-  }
-
-  if (!loading && filteredData.length === 0) {
-    return <NotFound />;
-  }
-
-  return (
+  return filteredData.length === 0 ? (
+    <NotFound />
+  ) : (
     <MatchStyle>
       {filteredData.map((item, idx) => (
         <MatchContainer key={idx} onClick={() => navigateLink(item.link)}>
@@ -82,25 +68,10 @@ const MatchStyle = styled.div`
   width: 80%;
   margin: 0 auto;
   text-align: center;
-  position: relative;
 
   @media screen and (max-width: 768px) {
     width: 100%;
   }
-`;
-
-const LoadingWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 const MatchContainer = styled.div`
@@ -166,12 +137,12 @@ const Info = styled.div`
 const CountContainer = styled.div`
   display: flex;
   align-items: center;
-  min-width: 60px; /* Ensure consistent width */
+  min-width: 60px;
 `;
 
 const Count = styled.div`
-  text-align: right; /* Ensure alignment within the flex container */
-  width: 20px; /* Set a fixed width for each count to maintain alignment */
+  text-align: right;
+  width: 20px;
 `;
 
 const PlatformStyle = styled.div<PlatformProps>`
