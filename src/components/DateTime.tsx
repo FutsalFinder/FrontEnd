@@ -79,7 +79,7 @@ const DateTime: React.FC = () => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 7,
     slidesToScroll: 1,
     swipeToSlide: true, // 스와이프한 만큼 넘어가도록 설정
   };
