@@ -8,6 +8,8 @@ import React, {
 import Loading from "../components/Loading";
 import styled from "styled-components";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 interface Data {
   title: string;
   time: string;
@@ -68,7 +70,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({
     const fetchData = async () => {
       setLoading(true);
       // const url = `http://localhost:8080/matches/${date}?region=${region}`;
-      const url = `https://match.futsalfinder.store/matches/${date}?region=${region}`;
+      const url = `${BASE_URL}${date}?region=${region}`;
       try {
         const response = await fetch(url);
         if (!response.ok) throw new Error("데이터를 불러오는데 실패했습니다.");
