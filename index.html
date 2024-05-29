@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./public/favicon.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
+    />
     <title>Futsal</title>
     <link
       href="https://fonts.googleapis.com/css?family=Nanum+Gothic"
@@ -13,20 +16,22 @@
     <meta property="og:description" content="풋살 매치를 한 눈에" />
     <meta property="og:image" content="/thumbnail.jpg" />
     <meta content="yes" name="apple-mobile-web-app-capable" />
-    <meta
-      content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
-      name="viewport"
-    />
     <style>
       html {
         overflow-x: hidden;
       }
       body {
         font-family: "Nanum Gothic", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      #root {
+        width: 100%;
+        overflow-x: hidden;
       }
     </style>
   </head>
-  <body style="margin: 0px">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
