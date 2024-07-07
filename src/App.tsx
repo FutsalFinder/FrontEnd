@@ -1,13 +1,19 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
+import { lazy, Suspense } from "react";
 import Error from "./components/common/Error";
 import { DataProvider } from "./context/DataContext";
+
+const Home = lazy(() => import("./pages/Home"));
 
 const routerList = [
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <Home />
+      </Suspense>
+    ),
   },
 ];
 

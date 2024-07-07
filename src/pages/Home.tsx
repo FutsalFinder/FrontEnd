@@ -11,6 +11,7 @@ const Home = () => {
           width={"40%"}
           height={"40%"}
           alt="stadium"
+          loading="lazy"
         />
       </ImgContainer>
       <DateStyle>
